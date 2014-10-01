@@ -1,0 +1,146 @@
+// Dependencies (variables and mixins)
+@import "../vendor/bootstrap/less/variables";
+@import "../vendor/bootstrap/less/mixins";
+
+// Imports (bootstrap etc)
+@import "imports";
+
+// Sx imports.
+@import "sx-edit/media";
+
+.sx-edit {
+  height: 52px;
+}
+
+// Global styles for sx.
+.sx-component {
+  -webkit-transition : .2s all ease;
+  transition         : .2s all ease;
+  outline            : 2px dashed transparent;
+
+  &.sx-editable {
+    &:hover:not(.active) {
+      outline-color : #c1c1c1;
+    }
+  }
+
+  &.active {
+    outline-color : #d6d6d6;
+  }
+}
+
+.sx-row {
+  &.sx-draggable {
+    cursor : move;
+  }
+}
+
+#sx-tools {
+  .sx-controls.navbar-right {
+    margin-right : 0;
+  }
+
+  .sx-component-controls {
+    display : none;
+  }
+
+  .sx-section {
+    display : none;
+  }
+}
+
+.sx-edit-row {
+  .demo-column-container {
+    height : 50px;
+    .demo-body {
+      background-color : #F1F1F1;
+      width            : 100%;
+      height           : 100%;
+      border           : 1px solid #C2C2C2;
+      font-size        : 24px;
+      line-height      : 48px;
+      text-align       : center;
+      color            : #929292;
+    }
+  }
+}
+
+.sx-new-component {
+
+  .sx-icon {
+    font-size : 40px;
+    float     : left;
+    width     : 40px;
+  }
+
+  .sx-meta {
+    float : left;
+  }
+
+  .sx-blockquote-box.active {
+    background-color : #fff;
+    box-shadow       : 0px 0px 11px 1px #CECECE;
+    .opacity(1);
+  }
+
+  .sx-blockquote-box {
+
+    .opacity(0.8);
+
+    &:hover {
+      background-color : #f7f7f7;
+      cursor           : pointer;
+      .opacity(1);
+    }
+
+    border-right  : 5px solid #E6E6E6;
+    margin-bottom : 25px;
+    .sx-square {
+      width            : 100px;
+      min-height       : 50px;
+      margin-right     : 22px;
+      text-align       : center !important;
+      background-color : #E6E6E6;
+      color            : #fff;
+      padding          : 20px 0;
+
+      .fa {
+        width       : 49px;
+        height      : 49px;
+        font-size   : 2.5em;
+        line-height : 49px;
+      }
+    }
+  }
+
+}
+
+.sortable-placeholder {
+  outline : 1px dashed #cbcbcb;
+}
+
+button:focus {
+  outline : none !important;
+}
+
+#sx-page {
+  .sx-component {
+
+    &.sx-empty-component {
+      height        : 100px;
+      margin-top    : 20px;
+      margin-bottom : 10px;
+
+      .sx-component-placeholder {
+        height           : 100%;
+        width            : 100%;
+        background-color : #F1F1F1;
+        border           : 1px solid #C2C2C2;
+        font-size        : 24px;
+        line-height      : 100px;
+        text-align       : center;
+        color            : #929292;
+      }
+    }
+  }
+}

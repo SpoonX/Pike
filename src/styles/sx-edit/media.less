@@ -1,0 +1,57 @@
+.sx-media {
+  .column-right {
+    min-height  : 350px;
+    border-left : 1px solid @hr-border;
+    position    : relative;
+
+    .upload-button {
+      position : relative;
+      overflow : hidden;
+
+      input.upload {
+        position  : absolute;
+        top       : 0;
+        right     : 0;
+        margin    : 0;
+        padding   : 0;
+        font-size : 20px;
+        cursor    : pointer;
+        opacity   : 0;
+        filter    : alpha(opacity=0);
+      }
+    }
+  }
+
+  .column-left {
+    .file-overview {
+
+      .file-list {
+        tr {
+          cursor : pointer;
+        }
+
+        td {
+          vertical-align : middle;
+
+          img {
+            width: 48px;
+            height: 48px;
+          }
+
+          span {
+            margin-left : 3px;
+            font-size   : 48px;
+            color: #a80000;
+          }
+        }
+      }
+    }
+  }
+
+  .no-files {
+    width      : 100%;
+    text-align : center;
+    display    : inline-block;
+    margin-top : 155px;
+  }
+}
