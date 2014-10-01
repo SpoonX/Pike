@@ -1,8 +1,13 @@
-Pike
-====
+# SxCms
 
-Does stuff with Dock. The forbidden love. The fallen Angel. The hidden matrix of flux.
+Nothing to see here yet.
 
-This doesn't concern you.
+### Install
+1. npm install
+2. bower install
+3. gulp dev
+4. Figure out the rest.
 
-Will soon hold greatness
+### Browser support
+* IE9+
+* Normal browsers.

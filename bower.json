@@ -1,0 +1,31 @@
+{
+  "name": "Pike",
+  "version": "0.0.1",
+  "homepage": "https://github.com/SpoonX",
+  "authors": [
+    "RWOverdijk <r.w.overdijk@gmail.com>"
+  ],
+  "description": "SpoonX CMS",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "font-awesome": "~4.1.0",
+    "jquery.hotkeys": "jeresig/jquery.hotkeys#~0.1.0",
+    "requirejs-jquery": "~0.25.0",
+    "requirejs-text": "~2.0.12",
+    "requirejs-i18n": "~2.0.4",
+    "bootstrap-growl": "~1.1.0",
+    "bootbox": "~4.2.0",
+    "html.sortable": "~0.1.2",
+    "almond": "~0.3.0"
+  }
+}

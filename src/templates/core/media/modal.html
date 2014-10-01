@@ -1,0 +1,49 @@
+<div class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" data-result="false">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Selecteer een bestand</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row sx-media">
+                    <div class="col-xs-8 column-left" style="overflow: auto; height: 350px;">
+                        <table class="table file-overview table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Bestandsnaam</th>
+                                <th>Datum toegevoegd</th>
+                            </tr>
+                            </thead>
+                            <tbody class="file-list">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4 column-right">
+                        <div class="btn btn-success btn-block upload-button">
+                            <span class="fa fa-cloud-upload"></span> Upload nieuw bestand -
+                            <span class="small">(10MB max)</span>
+
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <input type="file" id="sx-media-upload" class="upload"
+                                       accept="image/png, image/jpeg, image/gif, application/pdf">
+                            </form>
+                        </div>
+                        <hr>
+                        <p>
+                            Selecteer links het gewenste bestand en klik vervolgens op <strong>bevestigen</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-result="false" data-dismiss="modal">Annuleren</button>
+                <button type="button" class="btn btn-primary" data-result="true">Bevestigen</button>
+            </div>
+        </div>
+    </div>
+</div>
