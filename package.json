@@ -1,0 +1,29 @@
+{
+  "name": "SxCms",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "dependencies": {
+    "mv": "^2.0.3",
+    "rc": "~0.3.3"
+  },
+  "scripts": {},
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rwoverdijk/SxCms.git"
+  },
+  "author": "rwoverdijk",
+  "license": "",
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-clean": "^0.3.1",
+    "gulp-less": "^1.3.5",
+    "gulp-livereload": "^2.1.1",
+    "gulp-watch": "^1.0.2",
+    "node-static": "^0.7.4",
+    "requirejs": "^2.1.14",
+    "run-sequence": "^1.0.0"
+  }
+}
