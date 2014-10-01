@@ -5,6 +5,7 @@ var gulp        = require('gulp'),
     watch       = require('gulp-watch'),
     server      = require('node-static'),
     runSequence = require('run-sequence'),
+    minifyCSS   = require('gulp-minify-css'),
     less        = require('gulp-less');
 
 function buildRequireJs (dev, callback) {
@@ -30,6 +31,13 @@ function buildRequireJs (dev, callback) {
 gulp.task('less', function () {
   return gulp.src('src/styles/main.less')
     .pipe(less())
+    .pipe(gulp.dest('build/styles'));
+});
+
+gulp.task('less-min', function() {
+  return gulp.src('src/styles/main.less')
+    .pipe(less())
+    .pipe(minifyCSS({keepSpecialComments: 0, processImport: false}))
     .pipe(gulp.dest('build/styles'));
 });
 
@@ -85,7 +93,7 @@ gulp.task('requirejs.prod', function (callback) {
 gulp.task('build', function (callback) {
   runSequence(
     'clean',
-    ['less', 'requirejs.prod', 'fontawesome'],
+    ['less-min', 'requirejs.prod', 'fontawesome'],
     callback
   );
 });
