@@ -90,10 +90,14 @@ gulp.task('requirejs.prod', function (callback) {
   buildRequireJs(false, callback);
 });
 
+gulp.task('copy', function () {
+  return gulp.src('src/scripts/editor.js').pipe(gulp.dest('build/scripts'));
+});
+
 gulp.task('build', function (callback) {
   runSequence(
     'clean',
-    ['less-min', 'requirejs.prod', 'fontawesome'],
+    ['less-min', 'copy', 'requirejs.prod', 'fontawesome'],
     callback
   );
 });
@@ -101,7 +105,7 @@ gulp.task('build', function (callback) {
 gulp.task('dev', function (callback) {
   runSequence(
     'clean',
-    ['less', 'requirejs.dev', 'fontawesome'],
+    ['less', 'copy', 'requirejs.dev', 'fontawesome'],
     ['watch', 'server'],
     callback
   );
