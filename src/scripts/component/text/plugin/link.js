@@ -34,24 +34,17 @@ define([
     return false;
   }
 
-  function openModal() {
-    if (!$modal) {
-      $modal = $linkModal.modal({show: false});
-    }
-
-    if (show) {
-      $modal.modal('show');
-    }
-
-    return $modal;
-  }
-
   return {
     deactivate : function ($anchor) {
       $anchor = $anchor || $activeNode;
 
+      if ($modal) {
+        $model.data('modal', null);
+      }
+
       $anchor.contents().unwrap();
     },
+
     initialize : function () {
       var selection = window.getSelection(), range, clonedRange, span, $anchorWrapper;
 
@@ -76,6 +69,7 @@ define([
 
       return false;
     },
+
     activate   : function ($element) {
       var isNew = false
         , self = this;
