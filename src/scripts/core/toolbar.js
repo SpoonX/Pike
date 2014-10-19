@@ -23,7 +23,7 @@ define(['jquery', 'text!templates/core/toolbar.html', 'jquery.bootstrap-growl'],
       , rules, rule, element, height, i, j, l;
 
     for (i = 0; i < styles.length; i++) {
-      rules = styles[i].cssRules;
+      rules = false;//styles[i].cssRules;
       if (!rules) {
         continue;
       }
