@@ -14,35 +14,44 @@ define(['jquery', 'text!templates/core/toolbar.html', 'jquery.bootstrap-growl'],
     , $componentControls;
 
   function preparePage() {
-    var possibilities = ['[style*="position:fixed"],[style*="position: fixed"]']
-      , searchFor = /\bposition:\s*fixed;/
-      , cssProp = 'position'
-      , cssValue = 'fixed'
-      , styles = document.styleSheets
-      , matches = []
-      , rules, rule, element, height, i, j, l;
+    var possibilities = ['[style*="position:fixed"],[style*="position: fixed"]'],
+      searchFor = /\bposition:\s*fixed;/,
+      cssProp = 'position',
+      cssValue = 'fixed',
+      styles = document.styleSheets,
+      matches = [],
+      isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
+      rules, rule, element, height, i, j, l;
 
-    for (i = 0; i < styles.length; i++) {
-      rules = styles[i].cssRules;
-      if (!rules) {
-        continue;
-      }
-      l = rules.length;
-      for (j = 0; j < l; j++) {
-        rule = rules[j];
-        if (searchFor.test(rule.cssText)) {
-          possibilities.push(rule.selectorText);
+    if (isFirefox) {
+      $('*').each(function () {
+        if ($(this).css(cssProp) === cssValue) {
+          matches.push(this)
+        }
+      });
+    } else {
+      for (i = 0; i < styles.length; i++) {
+        rules = styles[i].cssRules;
+        if (!rules) {
+          continue;
+        }
+        l = rules.length;
+        for (j = 0; j < l; j++) {
+          rule = rules[j];
+          if (searchFor.test(rule.cssText)) {
+            possibilities.push(rule.selectorText);
+          }
         }
       }
-    }
-    possibilities = possibilities.join(',');
-    possibilities = document.querySelectorAll(possibilities);
-    l = possibilities.length;
+      possibilities = possibilities.join(',');
+      possibilities = document.querySelectorAll(possibilities);
+      l = possibilities.length;
 
-    for (i = 0; i < l; i++) {
-      element = possibilities[i];
-      if (window.getComputedStyle(element, null).getPropertyValue(cssProp) === cssValue) {
-        matches.push(element);
+      for (i = 0; i < l; i++) {
+        element = possibilities[i];
+        if (window.getComputedStyle(element, null).getPropertyValue(cssProp) === cssValue) {
+          matches.push(element);
+        }
       }
     }
 

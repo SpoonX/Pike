@@ -1,13 +1,9 @@
 define([
   'jquery',
   './plugin/link',
-  'text!templates/component/text/anchor-popover.html',
   'jquery.hotkeys',
-  'dropdown',
-  'popover'
-], function($, link, anchorPopoverTemplate) {
-
-  var $anchorPopover = $(anchorPopoverTemplate);
+  'dropdown'
+], function($, link) {
 
   /**
    * The textElement kitchenSink.
@@ -77,14 +73,12 @@ define([
           , commandMethod = $commandElement.data('method')
           , commandObject = self.commandMethods[commandMethod];
 
-
         if (commandMethod.search(/\./) > -1) {
           return;
         }
 
         $commandElement.toggleClass(self.options.activeCommandClass, commandObject.isActive());
       });
-
 
       Object.getOwnPropertyNames(self.commandMethods).forEach(function(commandMethod) {
 
@@ -137,7 +131,7 @@ define([
 
       $canvas.on('keyup mouseup', this.updateSink);
 
-      this.setupAnchorPopover($canvas.find('a'));
+      this.commandMethods.link.prepare($canvas);
 
       if (!skipFocus) {
         $canvas.focus();
@@ -169,58 +163,13 @@ define([
       this.$activeCanvas.off('keyup mouseup', this.updateSink);
       this.$activeCanvas.attr('contenteditable', false);
 
-      var $anchors = this.$activeCanvas.find('a');
-
-      $anchors.trigger('before.destroy');
-      console.log('set to false 0');
-      $anchors.data('popover-visible', false).popover('destroy');
+      this.commandMethods.link.teardown(this.$activeCanvas);
 
       this.$activeCanvas = null;
 
       this.updateSink(false);
 
       return true;
-    },
-
-    setupAnchorPopover : function($anchor) {
-
-      var self = this, onClickEdit, onClickUnlink;
-
-      $anchor.each(function() {
-        var $anchorElement = $(this)
-          , $content = $anchorPopover.clone()
-          , $edit = $content.filter('[data-action="edit"]')
-          , $unlink = $content.filter('[data-action="unlink"]');
-
-        $anchorElement.popover({
-          placement : 'top',
-          content   : $content,
-          html      : true,
-          container : 'body',
-          trigger   : 'manual'
-        });
-
-        $anchorElement.data('bs.popover').tip().addClass('sx-ns');
-
-        onClickEdit = function() {
-          self.commandMethods.link.activate($anchorElement, self);
-          console.log('set to false 1');
-          $anchorElement.data('popover-visible', false).popover('hide');
-        };
-
-        onClickUnlink = function() {
-          console.log('set to false 2');
-          $anchorElement.data('popover-visible', false).popover('hide');
-          self.commandMethods.link.deactivate($anchorElement);
-        };
-
-        $edit.on('click', onClickEdit);
-        $unlink.on('click', onClickUnlink);
-        $anchorElement.one('before.destroy', function() {
-          $edit.off('click', onClickEdit);
-          $edit.off('click', onClickUnlink);
-        });
-      });
     },
 
     /**
