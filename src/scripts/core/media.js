@@ -10,16 +10,7 @@ define([
 ], function ($, socket, config, cookie, mediaTemplate, mediaItemTemplate) {
   var $mediaTemplate = $(mediaTemplate),
       $chosenFile,
-      $modal,
-      typeMap;
-
-  typeMap = {
-    'application/pdf': 'pdf',
-    'image/png'      : 'image',
-    'image/jpeg'     : 'image',
-    'image/gif'      : 'image'
-  };
-
+      $modal;
   function renderPreview(file) {
     var $rendered;
 
@@ -62,8 +53,6 @@ define([
       } catch (error) {
         response = {error: 'json_error'};
       }
-
-      console.log(response);
 
       callback(response);
     };
