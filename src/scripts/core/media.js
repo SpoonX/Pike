@@ -8,10 +8,10 @@ define([
   'jquery.bootstrap-growl',
   'modal'
 ], function ($, socket, config, cookie, mediaTemplate, mediaItemTemplate) {
-  var $mediaTemplate = $(mediaTemplate)
-    , $chosenFile
-    , $modal
-    , typeMap;
+  var $mediaTemplate = $(mediaTemplate),
+      $chosenFile,
+      $modal,
+      typeMap;
 
   typeMap = {
     'application/pdf': 'pdf',
@@ -35,6 +35,9 @@ define([
         $rendered = $('<img />').attr('src', '/media/' + file.filename).addClass('img-circle');
 
         break;
+      default:
+        $rendered = $('<span class="fa fa-question-circle"></span>');
+
     }
 
     return $rendered;
@@ -42,7 +45,7 @@ define([
 
   // image/png, image/jpeg, image/gif
 
-  function uploadFile(file) {
+  function uploadFile(file, callback) {
     var formData = new FormData();
 
     formData.append('media', file, file.name);
@@ -52,13 +55,17 @@ define([
     xhr.open('POST', config.endpoint + '/media/upload?token=' + cookie.read('sx_jwt'), true);
 
     xhr.onload = function () {
-      if (xhr.status === 200) {
-        // File(s) uploaded.
-        // uploadButton.innerHTML = 'Upload';
-        alert('Uploaded');
-      } else {
-        alert('An error occurred!');
+      var response;
+
+      try {
+        response = JSON.parse(xhr.responseText)
+      } catch (error) {
+        response = {error: 'json_error'};
       }
+
+      console.log(response);
+
+      callback(response);
     };
 
     xhr.send(formData);
@@ -95,8 +102,6 @@ define([
     // @todo cache this
     socket.get('/media', function (response) {
       if (response.error) {
-        console.log('Error retrieving ');
-        console.log(response);
 
         // Report errors.
         return callback();
@@ -129,7 +134,6 @@ define([
       }
 
       populateMediaItems(function() {
-
         var $uploadButton
           , $items;
 
@@ -161,11 +165,37 @@ define([
         $uploadButton.on('change', function (event) {
           var file = this.files[0];
 
+          // Cancel
+          if (!file) {
+            return;
+          }
+
           if (file.size > 10485760) {
             return $.bootstrapGrowl('Het gekozen bestand is te groot (max 10MB).', { type: 'danger' });
           }
 
-          uploadFile(file);
+          uploadFile(file, function (response) {
+            if (response.error) {
+              var message;
+
+              switch (response.error) {
+                case 'duplicate_file':
+                  message = 'Er is al een bestand met deze naam.';
+                  break;
+
+                case 'file_too_large':
+                  message = 'Het gekozen bestand is te groot (max 10MB).';
+                  break;
+
+                default:
+                  message = 'Er is een onbekende fout opgetreden.';
+              }
+
+              return $.bootstrapGrowl(message, { type: 'danger' });
+            }
+
+            $.bootstrapGrowl('Het bestand is succesvol toegevoegd.', { type: 'success' });
+          });
         });
 
         $items.on('click', function () {
