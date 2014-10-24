@@ -1,11 +1,13 @@
 define([
   'jquery',
   'core/socket',
+  'core/config',
+  './utilities/cookie',
   'text!templates/core/media/modal.html',
   'text!templates/core/media/item.html',
   'jquery.bootstrap-growl',
   'modal'
-], function ($, socket, mediaTemplate, mediaItemTemplate) {
+], function ($, socket, config, cookie, mediaTemplate, mediaItemTemplate) {
   var $mediaTemplate = $(mediaTemplate)
     , $chosenFile
     , $modal
@@ -30,7 +32,7 @@ define([
       case 'image/png'  :
       case 'image/jpeg' :
       case 'image/gif'  :
-        $rendered = $('<img />').attr('src', '/media/view/' + file.filename).addClass('img-circle');
+        $rendered = $('<img />').attr('src', '/media/' + file.filename).addClass('img-circle');
 
         break;
     }
@@ -47,7 +49,7 @@ define([
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', '/media/upload', true);
+    xhr.open('POST', config.endpoint + '/media/upload?token=' + cookie.read('sx_jwt'), true);
 
     xhr.onload = function () {
       if (xhr.status === 200) {
@@ -104,7 +106,7 @@ define([
         var $preview = renderPreview(mediaEntry)
           , $item = $(mediaItemTemplate);
 
-        mediaEntry.url = '/media/view/' + encodeURIComponent(mediaEntry.filename);
+        mediaEntry.url = '/media/' + encodeURIComponent(mediaEntry.filename);
 
         $item.find('.preview').html($preview);
         $item.find('.filename').text(mediaEntry.filename);
