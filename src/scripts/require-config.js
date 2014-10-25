@@ -1,10 +1,10 @@
 requirejs.config({
-  config : {
-    'core/socket' : {
-      host: 'api.picnicx.com'
+  config: {
+    'core/config': {
+      endpoint: '//api.picnicx.com'
     }
   },
-  paths: {
+  paths : {
     'core'                  : './core',
     'components'            : './component/main',
     'controls'              : './core/controls/main',
@@ -24,7 +24,7 @@ requirejs.config({
     'popover'               : '../vendor/bootstrap/js/popover',
     'tooltip'               : '../vendor/bootstrap/js/tooltip'
   },
-  shim : {
+  shim  : {
     'jquery.hotkeys'        : ['jquery'],
     'alert'                 : ['jquery'],
     'sortable'              : ['jquery'],
