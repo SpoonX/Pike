@@ -11,7 +11,8 @@ define([
   var $mediaTemplate = $(mediaTemplate),
       $chosenFile,
       $modal;
-  function renderPreview(file) {
+
+  function renderPreview (file) {
     var $rendered;
 
     switch (file.mime_type) {
@@ -36,7 +37,7 @@ define([
 
   // image/png, image/jpeg, image/gif
 
-  function uploadFile(file, callback) {
+  function uploadFile (file, callback) {
     var formData = new FormData();
 
     formData.append('media', file, file.name);
@@ -60,7 +61,7 @@ define([
     xhr.send(formData);
   }
 
-  function formatDate(string) {
+  function formatDate (string) {
     var date = new Date(string)
       , formatted = '';
 
@@ -82,35 +83,60 @@ define([
     return formatted;
   }
 
-  function datePadding(dateValue) {
+  function datePadding (dateValue) {
     return ('0' + dateValue).substr(-2);
   }
 
-  function populateMediaItems(callback) {
+  function onFileClick () {
+    var $clickedTile = $(this);
+
+    if ($chosenFile) {
+      $chosenFile.removeClass('info');
+    }
+
+    if ($chosenFile && $clickedTile[0] === $chosenFile[0]) {
+      $chosenFile = null;
+
+      return;
+    }
+
+    $chosenFile = $clickedTile;
+    $chosenFile.addClass('info');
+  }
+
+  function buildMediaItem (mediaEntry, placement) {
+    var $preview = renderPreview(mediaEntry),
+        $item = $(mediaItemTemplate);
+
+    placement = 'prepend' === placement ? 'prepend' : 'append';
+
+    mediaEntry.url = '/media/' + encodeURIComponent(mediaEntry.filename);
+
+    $item.find('.preview').html($preview);
+    $item.find('.filename').text(mediaEntry.filename);
+    $item.find('.created-date').text(formatDate(mediaEntry.createdAt));
+    $item.data('meta', mediaEntry);
+
+    $item.on('click', onFileClick);
+
+    $mediaTemplate.find('.file-list')[placement]($item);
+
+    return $item;
+  }
+
+  function populateMediaItems (callback) {
 
     // @todo cache this
-    socket.get('/media', function (response) {
+    socket.get('/media', {sort: 'createdAt desc'}, function (response) {
       if (response.error) {
 
         // Report errors.
         return callback();
       }
 
-      response.forEach(function (mediaEntry) {
-        var $preview = renderPreview(mediaEntry)
-          , $item = $(mediaItemTemplate);
+      response.forEach(buildMediaItem);
 
-        mediaEntry.url = '/media/' + encodeURIComponent(mediaEntry.filename);
-
-        $item.find('.preview').html($preview);
-        $item.find('.filename').text(mediaEntry.filename);
-        $item.find('.created-date').text(formatDate(mediaEntry.createdAt));
-        $item.data('meta', mediaEntry);
-
-        $mediaTemplate.find('.file-list').append($item);
-      });
-
-      return callback();
+      callback();
     });
   }
 
@@ -122,17 +148,14 @@ define([
         return $modal.modal('show');
       }
 
-      populateMediaItems(function() {
-        var $uploadButton
-          , $items;
+      populateMediaItems(function () {
+        var $resultTargets = $mediaTemplate.find('[data-result]'),
+            $uploadButton;
 
         // Create the modal.
         $modal = $mediaTemplate.modal();
 
-        $mediaTemplate.find('[data-result]').on('click', function() {
-
-          var result = $(this).data('result');
-          
+        function modalDismiss (result) {
           if (result && $chosenFile) {
             uponDecision($chosenFile.data('meta'));
           } else {
@@ -144,11 +167,21 @@ define([
             $chosenFile = null;
           }
 
+          $modal.off('hide.bs.modal');
           $modal.modal('hide');
+        }
+
+        $modal.on('hide.bs.modal', function () {
+          modalDismiss(false);
+        });
+
+        // Modal on hide, is always result false.
+        // Modal on success, is always true.
+        $resultTargets.on('click', function () {
+          modalDismiss($(this).data('result'));
         });
 
         $uploadButton = $modal.find('.upload-button .upload');
-        $items = $mediaTemplate.find('.file-list tr');
 
         // Hook for upload
         $uploadButton.on('change', function (event) {
@@ -160,7 +193,7 @@ define([
           }
 
           if (file.size > 10485760) {
-            return $.bootstrapGrowl('Het gekozen bestand is te groot (max 10MB).', { type: 'danger' });
+            return $.bootstrapGrowl('Het gekozen bestand is te groot (max 10MB).', {type: 'danger'});
           }
 
           uploadFile(file, function (response) {
@@ -180,28 +213,13 @@ define([
                   message = 'Er is een onbekende fout opgetreden.';
               }
 
-              return $.bootstrapGrowl(message, { type: 'danger' });
+              return $.bootstrapGrowl(message, {type: 'danger'});
             }
 
-            $.bootstrapGrowl('Het bestand is succesvol toegevoegd.', { type: 'success' });
+            $.bootstrapGrowl('Het bestand is succesvol toegevoegd.', {type: 'success'});
+
+            buildMediaItem(response.files[0], 'prepend').trigger('click');
           });
-        });
-
-        $items.on('click', function () {
-          var $clickedTile = $(this);
-
-          if ($chosenFile) {
-            $chosenFile.removeClass('info');
-          }
-
-          if ($chosenFile && $clickedTile[0] === $chosenFile[0]) {
-            $chosenFile = null;
-
-            return;
-          }
-
-          $chosenFile = $clickedTile;
-          $chosenFile.addClass('info');
         });
       });
     }
