@@ -12,6 +12,7 @@ define([
       $resultTargets = $linkModal.find('[data-result]'),
       $modal,
       $workingElement;
+
   /**
    * Get the node of the selection start
    */
@@ -98,7 +99,13 @@ define([
 
       $modal = $linkModal.modal();
 
-      $linkModal.find('.choose-media').on('click', function () {
+      $modal.find('.linked-url').focus();
+
+      $modal.on('shown.bs.modal', function () {
+        $modal.find('.linked-url').focus();
+      });
+
+      $linkModal.find('.open-media-modal').on('click', function () {
         media.selectFile(function (chosenFile) {
           if (!chosenFile) {
             return;
@@ -110,7 +117,7 @@ define([
         });
       });
 
-      function modalDismiss(result) {
+      function modalDismiss (result) {
         if (!result && isNew) {
           self.deactivate($workingElement);
         }

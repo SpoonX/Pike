@@ -29,7 +29,6 @@ define([
         break;
       default:
         $rendered = $('<span class="fa fa-question-circle"></span>');
-
     }
 
     return $rendered;
