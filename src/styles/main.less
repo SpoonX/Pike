@@ -1,15 +1,13 @@
 // Dependencies (variables and mixins)
 @import "../vendor/bootstrap/less/variables";
 @import "../vendor/bootstrap/less/mixins";
-
 // Imports (bootstrap etc)
 @import "imports";
-
 // Sx imports.
 @import "sx-edit/media";
 
 .sx-edit {
-  height: 52px;
+  height : 52px;
 }
 
 // Global styles for sx.
@@ -36,6 +34,9 @@
 }
 
 #sx-tools {
+  .btn-group {
+    margin-bottom : 0 !important;
+  }
   .sx-controls.navbar-right {
     margin-right : 0;
   }
@@ -143,4 +144,10 @@ button:focus {
       }
     }
   }
+}
+
+/* EW EW EW EW */
+.modal-backdrop {
+  bottom  : 0;
+  z-index : 1050;
 }

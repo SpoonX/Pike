@@ -62,8 +62,6 @@ define([
           $.bootstrapGrowl('De pagina is gepubliceerd!', {type: 'success'});
         }
 
-        console.log(data);
-
         // Set back editable state after publish
         components.setEditable();
         $control.prop('disabled', false);
